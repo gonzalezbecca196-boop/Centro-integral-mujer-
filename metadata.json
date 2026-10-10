@@ -1,0 +1,8 @@
+{
+  "name": "Remix Remix CIM Mugica - Pantalla Principal y Agenda",
+  "description": "Aplicación comunitaria CIM Mugica con pantalla principal, gestión de agenda y turnos de atención.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}

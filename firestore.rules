@@ -1,0 +1,53 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Helper functions
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isStaffOrAdmin() {
+      return isSignedIn();
+    }
+
+    // Default deny for unmatched collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Users / Staff profiles
+    match /users/{userId} {
+      allow read: if isSignedIn();
+      allow write: if isSignedIn() && (request.auth.uid == userId || request.auth.token.email == 'gonzalezbecca196@gmail.com');
+    }
+
+    // Administrative Turnos (Appointments)
+    match /turnos/{turnoId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // Legajos y Expedientes de Casos (Confidential Case Files)
+    match /legajos/{legajoId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // Avisos y Novedades Institucionales
+    match /avisos/{avisoId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // Monitoreo y Reportes de Senderos Seguros
+    match /senderoReports/{reportId} {
+      allow read: if true;
+      allow write: if isSignedIn();
+    }
+
+    // Planes y Evaluaciones de Seguridad
+    match /safetyPlans/{userId} {
+      allow read, write: if isSignedIn();
+    }
+  }
+}

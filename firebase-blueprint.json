@@ -1,0 +1,118 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Perfil del personal profesional o administrativo del CIM.",
+      "type": "object",
+      "properties": {
+        "uid": { "type": "string", "maxLength": 128 },
+        "displayName": { "type": "string", "maxLength": 120 },
+        "email": { "type": "string", "maxLength": 120 },
+        "photoURL": { "type": "string", "maxLength": 500 },
+        "phone": { "type": "string", "maxLength": 50 },
+        "role": { "type": "string", "enum": ["coordinacion", "psicologia", "legal", "trabajo_social", "recepcion", "admin"] },
+        "sede": { "type": "string", "maxLength": 100 },
+        "createdAt": { "type": "string" },
+        "updatedAt": { "type": "string" }
+      },
+      "required": ["uid", "email"]
+    },
+    "Turno": {
+      "title": "Turno",
+      "description": "Turno o cita administrativa de atención médica, psicológica, social o jurídica en CIM Mugica.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "legajoId": { "type": "string", "maxLength": 128 },
+        "nombreUsuaria": { "type": "string", "maxLength": 120 },
+        "dni": { "type": "string", "maxLength": 30 },
+        "title": { "type": "string", "maxLength": 150 },
+        "serviceType": { "type": "string", "enum": ["psicologia", "legal", "social", "medica", "talleres"] },
+        "dateLabel": { "type": "string", "maxLength": 60 },
+        "dateTimeIso": { "type": "string", "maxLength": 50 },
+        "location": { "type": "string", "maxLength": 150 },
+        "professional": { "type": "string", "maxLength": 100 },
+        "status": { "type": "string", "enum": ["confirmado", "pendiente", "completado", "cancelado", "en_atencion"] },
+        "notes": { "type": "string", "maxLength": 1000 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["title", "serviceType", "dateLabel", "dateTimeIso", "location", "status"]
+    },
+    "LegajoCaso": {
+      "title": "LegajoCaso",
+      "description": "Expediente interdisciplinario confidencial de usuaria/caso en CIM Mugica.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "numeroExpediente": { "type": "string", "maxLength": 60 },
+        "nombreUsuaria": { "type": "string", "maxLength": 120 },
+        "dni": { "type": "string", "maxLength": 30 },
+        "telefono": { "type": "string", "maxLength": 50 },
+        "sectorBarrio": { "type": "string", "maxLength": 100 },
+        "riesgo": { "type": "string", "enum": ["alto", "medio", "bajo"] },
+        "medidasProteccion": { "type": "array" },
+        "estado": { "type": "string", "enum": ["activo", "derivado", "cerrado", "en_espera"] },
+        "profesionalAsignado": { "type": "string", "maxLength": 100 },
+        "derivacionOrigen": { "type": "string", "maxLength": 100 },
+        "ultimaAtencion": { "type": "string", "maxLength": 60 },
+        "notas": { "type": "string", "maxLength": 2000 },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["numeroExpediente", "nombreUsuaria", "riesgo", "estado"]
+    },
+    "SenderoReport": {
+      "title": "SenderoReport",
+      "description": "Reporte de incidencia o estado de infraestructura en los Senderos Seguros gestionado por el equipo de guardia.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "senderoId": { "type": "string", "maxLength": 50 },
+        "senderoName": { "type": "string", "maxLength": 150 },
+        "puntoAfectado": { "type": "string", "maxLength": 150 },
+        "tipoProblema": { "type": "string", "enum": ["luminaria", "totem", "camara", "obstruccion", "acompanamiento"] },
+        "descripcion": { "type": "string", "maxLength": 500 },
+        "estado": { "type": "string", "enum": ["pendiente", "en_reparacion", "resuelto"] },
+        "fechaReporte": { "type": "string" },
+        "promotoraAsignada": { "type": "string", "maxLength": 100 }
+      },
+      "required": ["senderoId", "puntoAfectado", "tipoProblema", "estado"]
+    },
+    "Aviso": {
+      "title": "Aviso",
+      "description": "Novedades, talleres y convocatorias oficiales gestionadas por la coordinación del CIM.",
+      "type": "object",
+      "properties": {
+        "id": { "type": "string", "maxLength": 128 },
+        "title": { "type": "string", "maxLength": 150 },
+        "description": { "type": "string", "maxLength": 1000 },
+        "tag": { "type": "string", "maxLength": 50 },
+        "tagType": { "type": "string", "enum": ["nuevo", "recordatorio", "salud"] },
+        "date": { "type": "string", "maxLength": 40 },
+        "actionText": { "type": "string", "maxLength": 60 }
+      },
+      "required": ["title", "description", "tag", "tagType", "date"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "Perfiles y credenciales del equipo administrativo del CIM."
+    },
+    "/turnos/{turnoId}": {
+      "schema": "Turno",
+      "description": "Turnos y agenda de consultas programadas de las usuarias con el equipo."
+    },
+    "/legajos/{legajoId}": {
+      "schema": "LegajoCaso",
+      "description": "Expedientes confidenciales de casos atendidos por los equipos interdisciplinarios."
+    },
+    "/senderoReports/{reportId}": {
+      "schema": "SenderoReport",
+      "description": "Gestión técnica y de rondas de los Senderos Seguros del Barrio Mugica."
+    },
+    "/avisos/{avisoId}": {
+      "schema": "Aviso",
+      "description": "Publicaciones y talleres oficiales del CIM."
+    }
+  }
+}
